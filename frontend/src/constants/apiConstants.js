@@ -1,0 +1,2 @@
+export const API_BASE_URL = 'http://localhost:7878';//process.env.REACT_APP_SERVER_URL;
+export const ACCESS_TOKEN_NAME = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZSIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJWRU5ET1IifV0sImlhdCI6MTYwMzUwNzM4OSwiZXhwIjoxNjA0Mjk2ODAwfQ.aF46nxIvzpdJP3FnS4wSlqreKSXEC6WWhJrexgSduXwXoqjRs03uI-gG-EliJz1ZwYwJYmLGWcYrizRNBJXEhg';
