@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "proxy": "https://onlineshoppingappn.herokuapp.com/",
+  "proxy": "https://localhost:7878/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
