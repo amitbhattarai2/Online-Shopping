@@ -1,6 +1,5 @@
 {
   "name": "frontend",
-  "proxy": "https://onlineshoppingappn.herokuapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -22,7 +21,6 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
