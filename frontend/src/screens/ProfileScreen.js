@@ -27,11 +27,11 @@ const ProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      if (!user.name) {
+      if (!userInfo.firstname ) {
         dispatch(getUserDetails('profile'))
       } else {
-        setName(user.name)
-        setEmail(user.email)
+        setName(userInfo.firstname )
+        setEmail(userInfo.email)
       }
     }
   }, [dispatch, history, userInfo, user])
