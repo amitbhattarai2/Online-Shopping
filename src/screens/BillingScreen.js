@@ -4,26 +4,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
 import SelectUSState from 'react-select-us-states'
-import { saveShippingAddress } from '../actions/cartActions'
+import { saveBillingAddress } from '../actions/cartActions'
 
-const ShippingScreen = ({ history }) => {
+const BillingScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
-  const { shippingAddress } = cart
+  const { billingAddress } = cart
 
-  const [firstname, setFirstName] = useState(shippingAddress.firstname)
-  const [lastname, setLastName] = useState(shippingAddress.lastname)
-  const [address, setAddress] = useState(shippingAddress.address)
-  const [state, setStateAddress] = useState(shippingAddress.state)
-  const [city, setCity] = useState(shippingAddress.city)
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
-  const [country, setCountry] = useState(shippingAddress.country)
+  const [firstname, setFirstName] = useState(billingAddress.firstname)
+  const [lastname, setLastName] = useState(billingAddress.lastname)
+  const [address, setAddress] = useState(billingAddress.address)
+  const [state, setStateAddress] = useState(billingAddress.state)
+  const [city, setCity] = useState(billingAddress.city)
+  const [postalCode, setPostalCode] = useState(billingAddress.postalCode)
+  const [country, setCountry] = useState(billingAddress.country)
 
   const dispatch = useDispatch()
 
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      saveShippingAddress({
+      saveBillingAddress({
         firstname,
         lastname,
         address,
@@ -33,13 +33,13 @@ const ShippingScreen = ({ history }) => {
         country,
       })
     )
-    history.push('/billing')
+    history.push('/payment')
   }
 
   return (
     <FormContainer>
-      <CheckoutSteps step1 step2 />
-      <h1>Shipping</h1>
+      <CheckoutSteps step1 step2 step3 />
+      <h1>Billing</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='firstname'>
           <Form.Label>First Name</Form.Label>
@@ -124,4 +124,4 @@ const ShippingScreen = ({ history }) => {
   )
 }
 
-export default ShippingScreen
+export default BillingScreen

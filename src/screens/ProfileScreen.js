@@ -8,7 +8,9 @@ import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 
 const ProfileScreen = ({ location, history }) => {
-  const [name, setName] = useState('')
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -32,12 +34,15 @@ const ProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      if (!user || !user.name) {
+      if (!user || !user.username) {
         dispatch(getUserDetails('profile'))
-        dispatch(listMyOrders())
+        //dispatch(listMyOrders())
       } else {
-        setName(user.name)
+        setFirstName(user.firstname)
+        setLastName(user.lastname)
+        setUsername(user.username)
         setEmail(user.email)
+        setPassword(user.password)
       }
     }
   }, [dispatch, history, userInfo, user])
@@ -47,7 +52,16 @@ const ProfileScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      dispatch(
+        updateUserProfile({
+          id: user.id,
+          firstname,
+          lastname,
+          username,
+          email,
+          password,
+        })
+      )
     }
   }
 
@@ -64,13 +78,33 @@ const ProfileScreen = ({ location, history }) => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
+            <Form.Group controlId='firstname'>
+              <Form.Label>First Name</Form.Label>
               <Form.Control
                 type='name'
-                placeholder='Enter name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder='Enter Firstname'
+                value={firstname}
+                onChange={(e) => setFirstName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='lastname'>
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter Lastname'
+                value={lastname}
+                onChange={(e) => setLastName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='username'>
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter Username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

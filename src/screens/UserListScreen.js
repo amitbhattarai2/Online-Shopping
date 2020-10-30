@@ -70,11 +70,11 @@ const UserListScreen = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/user/${user.id}/edit`}>
+                  {/* <LinkContainer to={`/admin/user/${user.id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <i className='fas fa-edit'></i>
                     </Button>
-                  </LinkContainer>
+                  </LinkContainer> */}
                   {id !== user.id ? (
                     <Button
                       variant='danger'
