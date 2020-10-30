@@ -11,6 +11,7 @@ const RegisterScreen = ({ location, history }) => {
   const [firstname, setFirstName] = useState('')
   const [lastname, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [role, setRole] = useState('')
@@ -34,7 +35,7 @@ const RegisterScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(register(firstname, lastname, email, password, role))
+      dispatch(register(firstname, lastname, email, username, password, role))
     }
   }
 
@@ -72,7 +73,15 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
+        <Form.Group controlId='username'>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Enter Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Form.Group controlId='password'>
           <Form.Label>Password Address</Form.Label>
           <Form.Control
@@ -106,10 +115,10 @@ const RegisterScreen = ({ location, history }) => {
             ></Form.Check>
             <Form.Check
               type='radio'
-              label='Shopper'
-              id='shopper'
+              label='Client'
+              id='client'
               name='role'
-              value='SHOPPER'
+              value='CLIENT'
               onChange={(e) => setRole(e.target.value)}
             ></Form.Check>
           </Col>
@@ -123,7 +132,7 @@ const RegisterScreen = ({ location, history }) => {
       <Row className='py-3'>
         <Col>
           Have an Account?{' '}
-          <Link to={redirect ? `/signin?redirect=${redirect}` : '/signin'}>
+          <Link to={redirect ? `/login?redirect=${redirect}` : '/signin'}>
             Login
           </Link>
         </Col>
