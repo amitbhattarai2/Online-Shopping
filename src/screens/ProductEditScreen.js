@@ -40,14 +40,18 @@ const ProductEditScreen = ({ match, history }) => {
       dispatch({ type: PRODUCT_UPDATE_RESET })
       history.push(`/${userInfo.role.toLowerCase()}/productlist`)
     } else {
-      dispatch(listProductDetails(productId))
+      if (!product.name || product.id != productId) {
+        dispatch(listProductDetails(productId))
+      } else {
+        console.log('here')
+        setName(product.name)
+        setPrice(product.price)
+        setImage(product.image)
+        setCountInStock(product.countInStock)
+        setDescription(product.description)
+        setActive(product.active)
+      }
     }
-    setName(product.name)
-    setPrice(product.price)
-    setImage(product.image)
-    setCountInStock(product.countInStock)
-    setDescription(product.description)
-    setActive(product.active)
   }, [dispatch, history, match, productId, product, successUpdate])
 
   const uploadFileHandler = async (e) => {
