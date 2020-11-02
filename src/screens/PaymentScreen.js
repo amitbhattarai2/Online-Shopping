@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
@@ -28,7 +28,16 @@ const PaymentScreen = ({ history }) => {
   const [expiryDate, setExpiryDate] = useState('')
   const [cvc, setCVC] = useState('')
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!userInfo) {
+      history.push('/login?redirect=payment')
+    }
+  }, [userInfo])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -66,7 +75,7 @@ const PaymentScreen = ({ history }) => {
               id='mastercard'
               name='method'
               value='Mastercard'
-              checked={method === 'Mastercard'}
+              checked={method == 'Mastercard'}
               onChange={(e) => setMethod(e.target.value)}
             ></Form.Check>
             <Form.Check

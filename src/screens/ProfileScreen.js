@@ -31,12 +31,13 @@ const ProfileScreen = ({ location, history }) => {
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
   useEffect(() => {
+    dispatch(listMyOrders())
     if (!userInfo) {
       history.push('/login')
     } else {
       if (!user || !user.username) {
         dispatch(getUserDetails('profile'))
-        //dispatch(listMyOrders())
+        dispatch(listMyOrders())
       } else {
         setFirstName(user.firstname)
         setLastName(user.lastname)
@@ -158,32 +159,26 @@ const ProfileScreen = ({ location, history }) => {
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
-                <th>DELIVERED</th>
+                <th>STATUS</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order) => (
                 <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
+                  <td>{order.id}</td>
+                  <td>{order.order_created.split('T')[0]}</td>
+                  <td>{order.total}</td>
                   <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
+                    {order.status === 'PAID' ? (
+                      <Message variant='success'>Yes</Message>
                     ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                      <Message variant='danger'>No</Message>
                     )}
                   </td>
+                  <td>{order.status}</td>
                   <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/order/${order._id}`}>
+                    <LinkContainer to={`/order/${order.id}`}>
                       <Button className='btn-sm' variant='light'>
                         Details
                       </Button>

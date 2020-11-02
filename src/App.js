@@ -19,6 +19,7 @@ import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
+import AdminOrderListScreen from './screens/AdminOrderListScreen'
 
 const App = () => {
   return (
@@ -49,7 +50,7 @@ const App = () => {
             exact
           />
           <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
-          <Route path='/admin/orderlist' component={OrderListScreen} />
+          <Route path='/admin/orderlist' component={AdminOrderListScreen} />
           <Route
             path='/vendor/productlist'
             component={ProductListScreen}

@@ -5,11 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
 
   const cart = useSelector((state) => state.cart)
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   //   Calculate prices
   const addDecimals = (num) => {
@@ -17,9 +21,9 @@ const PlaceOrderScreen = ({ history }) => {
   }
 
   cart.itemsPrice = addDecimals(
-    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    cart.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
   )
-  cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 25)
+  cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 25 : 10)
   cart.taxPrice = addDecimals(Number((0.07 * cart.itemsPrice).toFixed(2)))
   cart.totalPrice = (
     Number(cart.itemsPrice) +
@@ -32,10 +36,13 @@ const PlaceOrderScreen = ({ history }) => {
 
   useEffect(() => {
     if (success) {
-      history.push(`/order/${order._id}`)
+      dispatch({ type: ORDER_CREATE_RESET })
+      history.push(`/order/${order.id}`)
     }
-    // eslint-disable-next-line
-  }, [history, success])
+    if (!userInfo) {
+      history.push('/login?redirect=placeOrder')
+    }
+  }, [history, success, userInfo])
 
   const placeOrderHandler = () => {
     dispatch(
@@ -92,12 +99,13 @@ const PlaceOrderScreen = ({ history }) => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/product/${item.productId}`}>
                             {item.name}
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.quantity} x ${item.price} = $
+                          {(item.quantity * item.price).toFixed(2)}
                         </Col>
                       </Row>
                     </ListGroup.Item>

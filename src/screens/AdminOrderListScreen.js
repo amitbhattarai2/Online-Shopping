@@ -4,31 +4,25 @@ import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listOrders, listVendorOrders } from '../actions/orderActions'
-import { VENDOR_ORDER_LIST_RESET } from '../constants/orderConstants'
+import { listOrders } from '../actions/orderActions'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 
-const OrderListScreen = ({ history }) => {
-  console.log('here')
+const AdminOrderListScreen = ({ history }) => {
   const dispatch = useDispatch()
 
-  const vendorOrderList = useSelector((state) => state.vendorOrderList)
-  const { loading, error, orders } = vendorOrderList
+  const orderList = useSelector((state) => state.orderList)
+  const { loading, error, orders } = orderList
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
   useEffect(() => {
-    dispatch({ type: VENDOR_ORDER_LIST_RESET })
-    if (userInfo && userInfo.role === 'VENDOR') {
-      dispatch(listVendorOrders())
+    if (userInfo && userInfo.role === 'ADMIN') {
+      dispatch(listOrders())
     } else {
       history.push('/login')
     }
   }, [dispatch, history, userInfo])
-
-  const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(2)
-  }
 
   return (
     <>
@@ -56,16 +50,9 @@ const OrderListScreen = ({ history }) => {
                 <td>{order.id}</td>
                 <td>{order.user.username}</td>
                 <td>{order.order_created.split('T')[0]}</td>
+                <td>{order.total}</td>
                 <td>
-                  {addDecimals(
-                    order.listItemDTO.reduce(
-                      (acc, item) => acc + item.product.price * item.quantity,
-                      0
-                    ) * 1.07
-                  )}
-                </td>
-                <td>
-                  {order.payment.status === 'SUCCESS' ? (
+                  {order.status === 'PAID' || order.status == 'RECEIVED' ? (
                     <Message variant='success'>Yes</Message>
                   ) : (
                     <Message variant='danger'>No</Message>
@@ -104,4 +91,4 @@ const OrderListScreen = ({ history }) => {
   )
 }
 
-export default OrderListScreen
+export default AdminOrderListScreen
