@@ -37,6 +37,9 @@ const PaymentScreen = ({ history }) => {
     if (!userInfo) {
       history.push('/login?redirect=payment')
     }
+    if (userInfo && userInfo.role !== 'CLIENT') {
+      history.push('/')
+    }
   }, [userInfo])
 
   const submitHandler = (e) => {

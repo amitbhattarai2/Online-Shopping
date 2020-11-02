@@ -42,6 +42,9 @@ const PlaceOrderScreen = ({ history }) => {
     if (!userInfo) {
       history.push('/login?redirect=placeOrder')
     }
+    if (userInfo && userInfo.role !== 'CLIENT') {
+      history.push('/')
+    }
   }, [history, success, userInfo])
 
   const placeOrderHandler = () => {

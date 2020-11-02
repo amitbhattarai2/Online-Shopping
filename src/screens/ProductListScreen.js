@@ -51,26 +51,19 @@ const ProductListScreen = ({ history, match }) => {
   } = productCreate
 
   useEffect(() => {
+    dispatch({ type: PRODUCT_CREATE_RESET })
     if (userInfo && userInfo.role === 'VENDOR') {
       dispatch(listVendorProducts(userInfo.id, pageNumber))
-    }
 
-    dispatch({ type: PRODUCT_CREATE_RESET })
-
-    if (
-      !userInfo ||
-      !userInfo.role === 'ADMIN' ||
-      !userInfo.role === 'VENDOR'
-    ) {
-      history.push('/login')
-    }
-
-    if (successCreate) {
-      history.push(
-        `/${userInfo.role.toLowerCase()}/product/${createdProduct.id}/edit`
-      )
-    } else {
+      if (successCreate) {
+        history.push(
+          `/${userInfo.role.toLowerCase()}/product/${createdProduct.id}/edit`
+        )
+      }
+    } else if (userInfo && userInfo.role === 'ADMIN') {
       dispatch(listProducts('', pageNumber))
+    } else {
+      history.push('/login')
     }
   }, [
     dispatch,
@@ -98,7 +91,7 @@ const ProductListScreen = ({ history, match }) => {
         <Col>
           <h1>Products</h1>
         </Col>
-        {userInfo.role === 'VENDOR' ? (
+        {userInfo && userInfo.role === 'VENDOR' ? (
           <Col className='text-right'>
             <Button className='my-3' onClick={createProductHandler}>
               <i className='fas fa-plus'></i> Create Product
@@ -123,6 +116,7 @@ const ProductListScreen = ({ history, match }) => {
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
+                <th>CATEGORY</th>
                 <th>PRICE</th>
                 <th>IMAGE</th>
                 <th>DESCRIPTION</th>
@@ -135,6 +129,7 @@ const ProductListScreen = ({ history, match }) => {
                 <tr key={product.id}>
                   <td>{product.id}</td>
                   <td>{product.name}</td>
+                  <td>{product.category.name}</td>
                   <td>${product.price}</td>
 
                   <td>
@@ -163,9 +158,9 @@ const ProductListScreen = ({ history, match }) => {
                   </td>
                   <td>
                     <LinkContainer
-                      to={`/${userInfo.role.toLowerCase()}/product/${
-                        product.id
-                      }/edit`}
+                      to={`/${
+                        userInfo && userInfo.role.toLowerCase()
+                      }/product/${product.id}/edit`}
                     >
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'></i>

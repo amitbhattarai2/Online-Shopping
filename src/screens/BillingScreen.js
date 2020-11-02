@@ -27,6 +27,9 @@ const BillingScreen = ({ history }) => {
     if (!userInfo) {
       history.push('/login?redirect=billing')
     }
+    if (userInfo && userInfo.role !== 'CLIENT') {
+      history.push('/')
+    }
   }, [userInfo])
 
   const submitHandler = (e) => {

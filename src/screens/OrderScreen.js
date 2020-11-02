@@ -32,12 +32,18 @@ const OrderScreen = ({ match, history }) => {
   }
 
   useEffect(() => {
+    if (order && userInfo && userInfo.id !== order.user.id) {
+      history.push('/')
+    }
     if (!userInfo) {
       history.push(`/login?redirect=order/${orderId}`)
     }
 
     if (!order || order.id != orderId) {
       dispatch(getOrderDetails(orderId))
+    }
+    if (userInfo && userInfo.role === 'VENDOR') {
+      history.push('/')
     }
   }, [dispatch, orderId, order, userInfo])
 

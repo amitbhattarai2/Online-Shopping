@@ -79,17 +79,7 @@ export const listProductDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
-
-    const { data } = await axios.get(`/api/products/${id}`, config)
+    const { data } = await axios.get(`/api/products/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,

@@ -12,6 +12,8 @@ const Header = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  //TODO Categories
+
   const logoutHandler = () => {
     dispatch(logout())
   }

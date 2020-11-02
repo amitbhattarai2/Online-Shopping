@@ -15,6 +15,9 @@ const CartScreen = ({ match, location, history }) => {
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, quantity))
@@ -26,6 +29,9 @@ const CartScreen = ({ match, location, history }) => {
   }
 
   const checkoutHandler = () => {
+    if (userInfo && userInfo.role === 'CLIENT') {
+      history.push('/login?redirect=shipping')
+    }
     history.push('/login?redirect=shipping')
   }
 
@@ -33,6 +39,7 @@ const CartScreen = ({ match, location, history }) => {
     <Row>
       <Col md={8}>
         <h1>Shopping Cart</h1>
+
         {cartItems.length === 0 ? (
           <Message>
             Your cart is empty <Link to='/'>Go Back</Link>
@@ -94,16 +101,22 @@ const CartScreen = ({ match, location, history }) => {
                 .reduce((acc, item) => acc + item.quantity * item.price, 0)
                 .toFixed(2)}
             </ListGroup.Item>
-            <ListGroup.Item>
-              <Button
-                type='button'
-                className='btn-block'
-                disabled={cartItems.length === 0}
-                onClick={checkoutHandler}
-              >
-                Proceed To Checkout
-              </Button>
-            </ListGroup.Item>
+            {userInfo && userInfo.role !== 'CLIENT' ? (
+              <Message>
+                Please login from a client account <Link to='/'>Go Back</Link>
+              </Message>
+            ) : (
+              <ListGroup.Item>
+                <Button
+                  type='button'
+                  className='btn-block'
+                  disabled={cartItems.length === 0}
+                  onClick={checkoutHandler}
+                >
+                  Proceed To Checkout
+                </Button>
+              </ListGroup.Item>
+            )}
           </ListGroup>
         </Card>
       </Col>

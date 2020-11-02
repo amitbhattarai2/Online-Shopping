@@ -8,11 +8,13 @@ import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { listProductDetails, updateProduct } from '../actions/productActions'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
+import { listCategory } from '../actions/categoryActions'
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
   const [name, setName] = useState('')
+  const [category, setCategory] = useState('')
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
   const [countInStock, setCountInStock] = useState(0)
@@ -28,6 +30,9 @@ const ProductEditScreen = ({ match, history }) => {
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
+  const categoryList = useSelector((state) => state.categoryList)
+  const { category: categories } = categoryList
+
   const productUpdate = useSelector((state) => state.productUpdate)
   const {
     loading: loadingUpdate,
@@ -36,6 +41,7 @@ const ProductEditScreen = ({ match, history }) => {
   } = productUpdate
 
   useEffect(() => {
+    dispatch(listCategory())
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET })
       history.push(`/${userInfo.role.toLowerCase()}/productlist`)
@@ -50,6 +56,7 @@ const ProductEditScreen = ({ match, history }) => {
         setCountInStock(product.countInStock)
         setDescription(product.description)
         setActive(product.active)
+        setCategory(product.category.name)
       }
     }
   }, [dispatch, history, match, productId, product, successUpdate])
@@ -57,7 +64,7 @@ const ProductEditScreen = ({ match, history }) => {
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0]
     const formData = new FormData()
-    formData.append('image', file)
+    formData.append('file', file)
     setUploading(true)
 
     try {
@@ -67,9 +74,9 @@ const ProductEditScreen = ({ match, history }) => {
         },
       }
 
-      const { data } = await axios.post('/api/upload', formData, config)
+      const { data } = await axios.post('/api/uploads', formData, config)
 
-      setImage(data)
+      setImage(`/images/${data}`)
       setUploading(false)
     } catch (error) {
       console.error(error)
@@ -84,6 +91,7 @@ const ProductEditScreen = ({ match, history }) => {
         updateProduct({
           id: productId,
           name,
+          category,
           price,
           image,
           description,
@@ -96,6 +104,7 @@ const ProductEditScreen = ({ match, history }) => {
         updateProduct({
           id: productId,
           name,
+          category,
           price,
           image,
           description,
@@ -108,7 +117,7 @@ const ProductEditScreen = ({ match, history }) => {
   return (
     <>
       <Link
-        to={`/${userInfo.role.toLowerCase()}/productlist`}
+        to={`/${userInfo && userInfo.role.toLowerCase()}/productlist`}
         className='btn btn-light my-3'
       >
         Go Back
@@ -131,6 +140,17 @@ const ProductEditScreen = ({ match, history }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='category'>
+              <Form.Label>Custom select</Form.Label>
+              <Form.Control as='select' custom>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId='price'>
@@ -206,7 +226,7 @@ const ProductEditScreen = ({ match, history }) => {
               <></>
             )} */}
 
-            {userInfo.role === 'ADMIN' ? (
+            {userInfo && userInfo.role === 'ADMIN' ? (
               <Form.Group controlId='status'>
                 <Form.Label>Status </Form.Label>
                 <ButtonGroup toggle>

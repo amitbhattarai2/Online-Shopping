@@ -43,6 +43,16 @@ const ProductScreen = ({ history, match }) => {
             </Col>
             <Col md={3}>
               <ListGroup variant='flush'>
+                {product && product.category ? (
+                  <ListGroup.Item>
+                    <Link to={`/categories/${product.category.id}`}>
+                      <Card.Text as='h8'>{product.category.name}</Card.Text>
+                    </Link>
+                  </ListGroup.Item>
+                ) : (
+                  <></>
+                )}
+
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
