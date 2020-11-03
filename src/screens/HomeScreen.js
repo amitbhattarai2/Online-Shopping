@@ -1,7 +1,15 @@
 import React, { useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Navbar,
+  Nav,
+  NavDropdown,
+  CardGroup,
+  Container,
+} from 'react-bootstrap'
 import Product from '../components/Product'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -54,19 +62,21 @@ const HomeScreen = ({ match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <Row>
-            {products &&
-              products.map((product) => (
-                <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
-                  <Product product={product} />
-                </Col>
-              ))}
-          </Row>
-          <Paginate
-            pages={pages}
-            page={page}
-            keyword={keyword ? keyword : ''}
-          />
+          <Container>
+            <Row>
+              {products &&
+                products.map((product) => (
+                  <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
+                    <Product product={product} />
+                  </Col>
+                ))}
+            </Row>
+            <Paginate
+              pages={pages}
+              page={page}
+              keyword={keyword ? keyword : ''}
+            />
+          </Container>
         </>
       )}
     </>
