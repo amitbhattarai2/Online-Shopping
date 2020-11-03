@@ -40,7 +40,9 @@ const HomeScreen = ({ match }) => {
             {categories &&
               categories.map((cat) => (
                 <NavDropdown.Item>
-                  <NavLink to={`/categories/${cat.id}`}>{cat.name}</NavLink>
+                  <NavLink to={`/search/@/category/${cat.id}`}>
+                    {cat.name}
+                  </NavLink>
                 </NavDropdown.Item>
               ))}
           </NavDropdown>
@@ -53,11 +55,12 @@ const HomeScreen = ({ match }) => {
       ) : (
         <>
           <Row>
-            {products.map((product) => (
-              <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
+            {products &&
+              products.map((product) => (
+                <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              ))}
           </Row>
           <Paginate
             pages={pages}

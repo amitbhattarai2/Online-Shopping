@@ -44,7 +44,9 @@ const CategoryHomeScreen = ({ match }) => {
             {categories &&
               categories.map((cat) => (
                 <NavDropdown.Item>
-                  <NavLink to={`/categories/${cat.id}`}>{cat.name}</NavLink>
+                  <NavLink to={`/search/@/category/${cat.id}`}>
+                    {cat.name}
+                  </NavLink>
                 </NavDropdown.Item>
               ))}
           </NavDropdown>

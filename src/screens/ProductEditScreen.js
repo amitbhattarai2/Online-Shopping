@@ -14,7 +14,7 @@ const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
   const [name, setName] = useState('')
-  const [category, setCategory] = useState('')
+  const [categoryId, setCategoryId] = useState('')
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
   const [countInStock, setCountInStock] = useState(0)
@@ -56,7 +56,7 @@ const ProductEditScreen = ({ match, history }) => {
         setCountInStock(product.countInStock)
         setDescription(product.description)
         setActive(product.active)
-        setCategory(product.category.name)
+        setCategoryId(product.category.id)
       }
     }
   }, [dispatch, history, match, productId, product, successUpdate])
@@ -91,7 +91,7 @@ const ProductEditScreen = ({ match, history }) => {
         updateProduct({
           id: productId,
           name,
-          category,
+          categoryId,
           price,
           image,
           description,
@@ -104,7 +104,7 @@ const ProductEditScreen = ({ match, history }) => {
         updateProduct({
           id: productId,
           name,
-          category,
+          categoryId,
           price,
           image,
           description,
@@ -146,7 +146,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Label>Select Category</Form.Label>
               <Form.Control
                 as='select'
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategoryId(e.target.options.selectedIndex)}
               >
                 {categories &&
                   categories.map((c) => <option key={c.id}>{c.name}</option>)}
