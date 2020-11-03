@@ -7,26 +7,30 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import Meta from '../components/Meta'
-import { listProducts } from '../actions/productActions'
+import { listProducts, listProductsByCategory } from '../actions/productActions'
 import { listCategory } from '../actions/categoryActions'
 
-const HomeScreen = ({ match }) => {
+const CategoryHomeScreen = ({ match }) => {
+  const catId = match.params.catId
   const keyword = match.params.keyword
 
   const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
 
-  const productList = useSelector((state) => state.productList)
-  const { loading, error, products, page, pages } = productList
+  const productListByCategory = useSelector(
+    (state) => state.categoryProductList
+  )
+  const { loading, error, products, page, pages } = productListByCategory
 
   const categoryList = useSelector((state) => state.categoryList)
   const { categories } = categoryList
 
   useEffect(() => {
-    dispatch(listCategory())
-    dispatch(listProducts(keyword, pageNumber))
-  }, [dispatch, keyword, pageNumber])
+    dispatch(
+      listProductsByCategory(catId, keyword === '@' ? '' : keyword, pageNumber)
+    )
+  }, [dispatch, catId, keyword, pageNumber])
 
   return (
     <>
@@ -53,11 +57,12 @@ const HomeScreen = ({ match }) => {
       ) : (
         <>
           <Row>
-            {products.map((product) => (
-              <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
+            {products &&
+              products.map((product) => (
+                <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              ))}
           </Row>
           <Paginate
             pages={pages}
@@ -70,4 +75,4 @@ const HomeScreen = ({ match }) => {
   )
 }
 
-export default HomeScreen
+export default CategoryHomeScreen

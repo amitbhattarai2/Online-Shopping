@@ -31,7 +31,7 @@ const ProductEditScreen = ({ match, history }) => {
   const { loading, error, product } = productDetails
 
   const categoryList = useSelector((state) => state.categoryList)
-  const { category: categories } = categoryList
+  const { categories } = categoryList
 
   const productUpdate = useSelector((state) => state.productUpdate)
   const {
@@ -143,13 +143,13 @@ const ProductEditScreen = ({ match, history }) => {
             </Form.Group>
 
             <Form.Group controlId='category'>
-              <Form.Label>Custom select</Form.Label>
-              <Form.Control as='select' custom>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+              <Form.Label>Select Category</Form.Label>
+              <Form.Control
+                as='select'
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories &&
+                  categories.map((c) => <option key={c.id}>{c.name}</option>)}
               </Form.Control>
             </Form.Group>
 
