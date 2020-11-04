@@ -6,10 +6,14 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { login } from '../actions/userActions'
+import { USER_LOGIN_RESET } from '../constants/userConstants'
+import { usernameValidator } from '../validatiors/formValidators'
 
 const LoginScreen = ({ location, history }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [usernameError, setUsernameError] = useState(false)
+  const [formError, setFormError] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -21,12 +25,24 @@ const LoginScreen = ({ location, history }) => {
   useEffect(() => {
     if (userInfo) {
       history.push(redirect)
+    } else {
+      dispatch({ type: USER_LOGIN_RESET })
     }
   }, [history, userInfo, redirect])
 
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(login(username, password))
+  }
+
+  const setUsernameValidator = (username) => {
+    if (username.trim() === '') {
+      setUsername('')
+      setUsernameError(false)
+    } else if (usernameValidator(username)) {
+      setUsername(username)
+      setUsernameError(false)
+    } else setUsernameError(true)
   }
 
   return (
@@ -41,8 +57,14 @@ const LoginScreen = ({ location, history }) => {
             type='name'
             placeholder='Enter Usernmae'
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            required
+            onChange={(e) => setUsernameValidator(e.target.value)}
           ></Form.Control>
+          {usernameError && (
+            <Message variant='danger'>
+              Only alphanumeric characters allowed
+            </Message>
+          )}
         </Form.Group>
 
         <Form.Group controlId='password'>
@@ -51,6 +73,7 @@ const LoginScreen = ({ location, history }) => {
             type='password'
             placeholder='Enter password'
             value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>

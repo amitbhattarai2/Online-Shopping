@@ -137,7 +137,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='name'
                 placeholder='Enter name'
-                value={name}
+                required
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -146,6 +146,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Label>Select Category</Form.Label>
               <Form.Control
                 as='select'
+                required
                 onChange={(e) => setCategoryId(e.target.options.selectedIndex)}
               >
                 {categories &&
@@ -158,7 +159,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='number'
                 placeholder='Enter price'
-                value={price}
+                required
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -169,11 +170,13 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter image url'
                 value={image}
+                required
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.File
                 id='image-file'
                 label='Choose File'
+                required
                 custom
                 onChange={uploadFileHandler}
               ></Form.File>
@@ -185,7 +188,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='number'
                 placeholder='Enter countInStock'
-                value={countInStock}
+                required
                 onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -196,6 +199,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter description'
                 value={description}
+                required
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>

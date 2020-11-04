@@ -21,7 +21,7 @@ const SearchBox = ({ history }) => {
     if (keyword.trim()) {
       history.push(`/search/${keyword}/category/${category ? category : 0}`)
     } else {
-      history.push(`/search/@/category/${category ? category : 0}`)
+      history.push(`/category/${category ? category : 0}`)
     }
   }
 
@@ -34,7 +34,7 @@ const SearchBox = ({ history }) => {
           size='sm'
           onChange={(e) => setCategory(e.target.options.selectedIndex)}
         >
-          <option disabled selected>
+          <option disabled value=''>
             Select Category
           </option>
           {categories &&

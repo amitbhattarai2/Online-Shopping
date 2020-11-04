@@ -46,7 +46,7 @@ const ProductScreen = ({ history, match }) => {
                 {product && product.category ? (
                   <ListGroup.Item>
                     <Link to={`/categories/${product.category.id}`}>
-                      <Card.Text as='h8'>{product.category.name}</Card.Text>
+                      <Card.Text>{product.category.name}</Card.Text>
                     </Link>
                   </ListGroup.Item>
                 ) : (

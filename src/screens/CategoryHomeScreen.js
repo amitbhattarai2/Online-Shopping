@@ -12,7 +12,7 @@ import { listCategory } from '../actions/categoryActions'
 
 const CategoryHomeScreen = ({ match }) => {
   const catId = match.params.catId
-  const keyword = match.params.keyword
+  const keyword = match.params.keyword || ''
 
   const pageNumber = match.params.pageNumber || 1
 

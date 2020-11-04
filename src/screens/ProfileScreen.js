@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Form, Button, Row, Col } from 'react-bootstrap'
+import { Table, Form, Button, Row, Col, ListGroup, Card } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
+import {
+  emailValidator,
+  nameValidator,
+  passwordValidator,
+  usernameValidator,
+} from '../validatiors/formValidators'
 
 const ProfileScreen = ({ location, history }) => {
   const [firstname, setFirstName] = useState('')
@@ -30,6 +36,39 @@ const ProfileScreen = ({ location, history }) => {
   const orderListMy = useSelector((state) => state.orderListMy)
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
+  const formErrors = [
+    'Firstname',
+    'Lastname',
+    'Email',
+    'Username',
+    'Password',
+    'Confirm Password',
+  ]
+  const formChecks = [false, false, false, false, false, false]
+
+  if (nameValidator(firstname)) {
+    formChecks[0] = true
+  }
+  if (nameValidator(lastname)) {
+    formChecks[1] = true
+  }
+  if (usernameValidator(username)) {
+    formChecks[3] = true
+  }
+  if (emailValidator(email)) {
+    formChecks[2] = true
+  }
+  if (passwordValidator(password)) {
+    formChecks[4] = true
+  }
+  if (
+    passwordValidator(password) &&
+    confirmPassword.trim() &&
+    password === confirmPassword
+  ) {
+    formChecks[5] = true
+  }
+
   useEffect(() => {
     dispatch(listMyOrders())
     if (!userInfo) {
@@ -52,7 +91,11 @@ const ProfileScreen = ({ location, history }) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
-    } else {
+    } else if (
+      !formChecks.some((e) => {
+        return e === false
+      })
+    ) {
       dispatch(
         updateUserProfile({
           id: user.id,
@@ -69,6 +112,16 @@ const ProfileScreen = ({ location, history }) => {
   return (
     <Row>
       <Col md={3}>
+        <ListGroup>
+          {userInfo &&
+            formErrors &&
+            formErrors.map((e, idx) => (
+              <ListGroup.Item variant='success' disabled={!formChecks[idx]}>
+                {e} <i class='fas fa-check' hidden={!formChecks[idx]} />
+                <i class='fas fa-times' hidden={formChecks[idx]} />
+              </ListGroup.Item>
+            ))}
+        </ListGroup>
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {}
@@ -124,9 +177,17 @@ const ProfileScreen = ({ location, history }) => {
               <Form.Control
                 type='password'
                 placeholder='Enter password'
-                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></Form.Control>
+              {!passwordValidator(password) && (
+                <Message variant='info'>
+                  <p>6 to 15 characters</p>
+                  <p>At least one lowercase</p>
+                  <p>At least one uppercase </p>
+                  <p>At least digit</p>
+                  <p>At least one special character</p>
+                </Message>
+              )}
             </Form.Group>
 
             <Form.Group controlId='confirmPassword'>
@@ -134,7 +195,6 @@ const ProfileScreen = ({ location, history }) => {
               <Form.Control
                 type='password'
                 placeholder='Confirm password'
-                value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               ></Form.Control>
             </Form.Group>

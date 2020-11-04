@@ -5,6 +5,7 @@ import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
 import SelectUSState from 'react-select-us-states'
 import { saveShippingAddress } from '../actions/cartActions'
+import { stateNames } from '../constants/usStatesConstants'
 
 const ShippingScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
@@ -96,14 +97,19 @@ const ShippingScreen = ({ history }) => {
         </Form.Group>
 
         <Form.Group controlId='state'>
-          <Form.Label>State </Form.Label>
+          <Form.Label>State</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter State'
-            value={state}
+            as='select'
+            size='sm'
             required
             onChange={(e) => setStateAddress(e.target.value)}
-          ></Form.Control>
+          >
+            <option disabled value='' selected>
+              Select State
+            </option>
+            {stateNames &&
+              stateNames.map((c, idx) => <option key={idx}>{c}</option>)}
+          </Form.Control>
         </Form.Group>
 
         <Form.Group controlId='postalCode'>
