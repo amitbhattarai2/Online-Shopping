@@ -21,6 +21,7 @@ import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import AdminOrderListScreen from './screens/AdminOrderListScreen'
 import CategoryHomeScreen from './screens/CategoryHomeScreen'
+import ReportScreen from './screens/ReportScreen'
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
           <Route path='/cart/:id?' component={CartScreen} />
           <Route path='/categories/:catId?' component={CategoryHomeScreen} />
           <Route path='/admin/userlist' component={UserListScreen} />
+          <Route path='/admin/reports' component={ReportScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
           <Route
             path='/admin/productlist'
