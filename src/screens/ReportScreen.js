@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import {
-  Table,
-  Badge,
-  Image,
-  Button,
-  Row,
-  Col,
-  Form,
-  ButtonGroup,
-  ToggleButton,
-  Card,
-} from 'react-bootstrap'
+import { Button, Col, Form, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import Paginate from '../components/Paginate'
-import { Link } from 'react-router-dom'
+
 import FormContainer from '../components/FormContainer'
 import { createProductsReport } from '../actions/productActions'
 import { USER_LOGIN_RESET } from '../constants/userConstants'
-import { PRODUCT_REPORT_RESET } from '../constants/productConstants'
-import { Parser } from 'html-to-react'
 
 const ReportScreen = ({ history, match }) => {
   const dispatch = useDispatch()
@@ -31,16 +17,23 @@ const ReportScreen = ({ history, match }) => {
 
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
+  const [type, setType] = useState(0)
 
   const productReport = useSelector((state) => state.productReport)
   const { loading, error, report } = productReport
+
+  const categories = [
+    'List of Product',
+    'Financial Report',
+    'Status of Sale by Report',
+  ]
 
   useEffect(() => {
     if (report) {
       console.log()
     }
-    //dispatch({ type: PRODUCT_REPORT_RESET })
-    if (!userInfo && userInfo.role !== 'ADMIN') {
+
+    if (!userInfo || userInfo.role !== 'ADMIN') {
       dispatch({ type: USER_LOGIN_RESET })
       history.push('/login')
     }
@@ -49,7 +42,8 @@ const ReportScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     if (userInfo.role === 'ADMIN') {
-      dispatch(createProductsReport())
+      console.log(type)
+      dispatch(createProductsReport(type + 1))
     }
   }
   if (!userInfo || !userInfo.role === 'ADMIN') {
@@ -58,7 +52,7 @@ const ReportScreen = ({ history, match }) => {
 
   return (
     <>
-      {userInfo.role === 'ADMIN' ? (
+      {userInfo && userInfo.role === 'ADMIN' ? (
         <FormContainer>
           <h1>Report</h1>
           {loading ? (
@@ -69,35 +63,24 @@ const ReportScreen = ({ history, match }) => {
             <Form onSubmit={submitHandler}>
               <Form.Row>
                 <Form.Group as={Col}>
-                  <Form.Label>Select Type</Form.Label>
-                  <Form.Control as='select' custom>
-                    <option>Product</option>
-                    <option>Orders</option>
-                  </Form.Control>
+                  <Form.Group controlId='category'>
+                    <Form.Label></Form.Label>
+                    <Form.Control
+                      as='select'
+                      size='sm'
+                      onChange={(e) => setType(e.target.options.selectedIndex)}
+                    >
+                      {categories &&
+                        categories.map((c, idx) => (
+                          <option key={idx}>{c}</option>
+                        ))}
+                    </Form.Control>
+                  </Form.Group>
                 </Form.Group>
 
-                <Form.Group as={Col} controlId='from'>
-                  <Form.Label>Form</Form.Label>
-                  <Form.Control
-                    type='date'
-                    placeholder='mm/dd/yy'
-                    value={from}
-                    onChange={(e) => setFrom(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
-
-                <Form.Group as={Col} controlId='to'>
-                  <Form.Label>To</Form.Label>
-                  <Form.Control
-                    type='date'
-                    placeholder='mm/dd/yy'
-                    value={to}
-                    onChange={(e) => setTo(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
                 <Form.Group>
                   <Button type='submit' variant='primary'>
-                    Submit
+                    Generate
                   </Button>
                 </Form.Group>
               </Form.Row>
@@ -106,10 +89,8 @@ const ReportScreen = ({ history, match }) => {
           {report ? (
             <>
               <Card>
-                <Card.Header>Generated Reports</Card.Header>
-                <Card.Text>
-                  {report.split('\\').slice(-1)[0]} generated in {report}
-                </Card.Text>
+                <Card.Header>Type of Report to Generate</Card.Header>
+                <Card.Text variant='success'>{categories[type]}</Card.Text>
               </Card>
             </>
           ) : (

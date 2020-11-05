@@ -70,13 +70,13 @@ const ProfileScreen = ({ location, history }) => {
   }
 
   useEffect(() => {
-    dispatch(listMyOrders())
+    if (userInfo.role === 'CLIENT') dispatch(listMyOrders())
     if (!userInfo) {
       history.push('/login')
     } else {
       if (!user || !user.username) {
         dispatch(getUserDetails('profile'))
-        dispatch(listMyOrders())
+        if (userInfo.role === 'CLIENT') dispatch(listMyOrders())
       } else {
         setFirstName(user.firstname)
         setLastName(user.lastname)
@@ -116,9 +116,13 @@ const ProfileScreen = ({ location, history }) => {
           {userInfo &&
             formErrors &&
             formErrors.map((e, idx) => (
-              <ListGroup.Item variant='success' disabled={!formChecks[idx]}>
-                {e} <i class='fas fa-check' hidden={!formChecks[idx]} />
-                <i class='fas fa-times' hidden={formChecks[idx]} />
+              <ListGroup.Item
+                variant='success'
+                key={idx}
+                disabled={!formChecks[idx]}
+              >
+                {e} <i className='fas fa-check' hidden={!formChecks[idx]} />
+                <i className='fas fa-times' hidden={formChecks[idx]} />
               </ListGroup.Item>
             ))}
         </ListGroup>
@@ -205,51 +209,55 @@ const ProfileScreen = ({ location, history }) => {
           </Form>
         )}
       </Col>
-      <Col md={9}>
-        <h2>My Orders</h2>
-        {loadingOrders ? (
-          <Loader />
-        ) : errorOrders ? (
-          <Message variant='danger'>{errorOrders}</Message>
-        ) : (
-          <Table striped bordered hover responsive className='table-sm'>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>STATUS</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order.id}</td>
-                  <td>{order.order_created.split('T')[0]}</td>
-                  <td>{order.total}</td>
-                  <td>
-                    {order.status === 'PAID' ? (
-                      <Message variant='success'>Yes</Message>
-                    ) : (
-                      <Message variant='danger'>No</Message>
-                    )}
-                  </td>
-                  <td>{order.status}</td>
-                  <td>
-                    <LinkContainer to={`/order/${order.id}`}>
-                      <Button className='btn-sm' variant='light'>
-                        Details
-                      </Button>
-                    </LinkContainer>
-                  </td>
+      {userInfo && userInfo.role === 'CLIENT' ? (
+        <Col md={9}>
+          <h2>My Orders</h2>
+          {loadingOrders ? (
+            <Loader />
+          ) : errorOrders ? (
+            <Message variant='danger'>{errorOrders}</Message>
+          ) : (
+            <Table striped bordered hover responsive className='table-sm'>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>DATE</th>
+                  <th>TOTAL</th>
+                  <th>PAID</th>
+                  <th>STATUS</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Col>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order._id}>
+                    <td>{order.id}</td>
+                    <td>{order.order_created.split('T')[0]}</td>
+                    <td>{order.total}</td>
+                    <td>
+                      {order.status === 'PAID' ? (
+                        <Message variant='success'>Yes</Message>
+                      ) : (
+                        <Message variant='danger'>No</Message>
+                      )}
+                    </td>
+                    <td>{order.status}</td>
+                    <td>
+                      <LinkContainer to={`/order/${order.id}`}>
+                        <Button className='btn-sm' variant='light'>
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      ) : (
+        <></>
+      )}
     </Row>
   )
 }

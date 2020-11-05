@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { FileDownload } from 'js-file-download'
 import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
@@ -31,6 +32,7 @@ import {
   PRODUCT_REPORT_SUCCESS,
   PRODUCT_REPORT_FAIL,
 } from '../constants/productConstants'
+import { jasperView } from '../validatiors/jasperValidations'
 import { logout } from './userActions'
 
 export const listProducts = (keyword = '', pageNumber = '') => async (
@@ -240,11 +242,67 @@ export const updateProduct = (product) => async (dispatch, getState) => {
   }
 }
 
-export const createProductsReport = () => async (dispatch, getState) => {
+export const createProductsReport = (type) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_REPORT_REQUEST })
 
-    const { data } = await axios.get(`/api/reports/products`)
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const { data } = await axios.get(`/api/reports/products`, {}, config)
+
+    if (type === 1) {
+      console.log('here')
+      await axios({
+        url: '/api/reports/products',
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', 'Product List.pdf')
+        document.body.appendChild(link)
+        link.click()
+      })
+    }
+
+    if (type === 2) {
+      await axios({
+        url: '/api/reports/price',
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', 'Financial Report.pdf')
+        document.body.appendChild(link)
+        link.click()
+      })
+    }
+
+    if (type === 3) {
+      await axios({
+        url: '/api/reports/product',
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', 'Status of Sale by Product.pdf')
+        document.body.appendChild(link)
+        link.click()
+      })
+    }
 
     dispatch({
       type: PRODUCT_REPORT_SUCCESS,
