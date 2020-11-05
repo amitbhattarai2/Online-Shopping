@@ -96,8 +96,8 @@ const RegisterScreen = ({ location, history }) => {
               {formErrors &&
                 formErrors.map((e, idx) => (
                   <ListGroup.Item variant='success' disabled={!formChecks[idx]}>
-                    {e} <i class='fas fa-check' hidden={!formChecks[idx]} />
-                    <i class='fas fa-times' hidden={formChecks[idx]} />
+                    {e} <i className='fas fa-check' hidden={!formChecks[idx]} />
+                    <i className='fas fa-times' hidden={formChecks[idx]} />
                   </ListGroup.Item>
                 ))}
             </ListGroup>

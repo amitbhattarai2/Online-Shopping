@@ -11,13 +11,13 @@ const BillingScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
   const { billingAddress } = cart
 
-  const [firstname, setFirstName] = useState(billingAddress.firstname)
-  const [lastname, setLastName] = useState(billingAddress.lastname)
-  const [address, setAddress] = useState(billingAddress.address)
-  const [state, setStateAddress] = useState(billingAddress.state)
-  const [city, setCity] = useState(billingAddress.city)
-  const [postalCode, setPostalCode] = useState(billingAddress.postalCode)
-  const [country, setCountry] = useState(billingAddress.country)
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
+  const [address, setAddress] = useState('')
+  const [state, setStateAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [postalCode, setPostalCode] = useState(0)
+  const [country, setCountry] = useState('')
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin

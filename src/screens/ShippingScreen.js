@@ -11,13 +11,13 @@ const ShippingScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
   const { shippingAddress } = cart
 
-  const [firstname, setFirstName] = useState(shippingAddress.firstname)
-  const [lastname, setLastName] = useState(shippingAddress.lastname)
-  const [address, setAddress] = useState(shippingAddress.address)
-  const [state, setStateAddress] = useState(shippingAddress.state)
-  const [city, setCity] = useState(shippingAddress.city)
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
-  const [country, setCountry] = useState(shippingAddress.country)
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
+  const [address, setAddress] = useState('')
+  const [state, setStateAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [postalCode, setPostalCode] = useState(0)
+  const [country, setCountry] = useState('')
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin

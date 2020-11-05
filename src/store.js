@@ -80,9 +80,6 @@ const paymentMethodFrontStorage = localStorage.getItem('paymentMethod')
 const initialState = {
   cart: {
     cartItems: cartItemsFromStorage,
-    shippingAddress: shippingAddressFromStorage,
-    billingAddress: billingAddressFromStorage,
-    paymentMethod: paymentMethodFrontStorage,
   },
   userLogin: { userInfo: userInfoFromStorage },
 }
