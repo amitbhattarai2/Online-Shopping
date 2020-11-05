@@ -108,7 +108,7 @@ const OrderScreen = ({ match, history }) => {
 
               <ListGroup.Item>
                 <h2>Order Items</h2>
-                {order.listItemDTO.length === 0 ? (
+                {order.listItemDTO && order.listItemDTO.length === 0 ? (
                   <Message>Order is empty</Message>
                 ) : (
                   <ListGroup variant='flush'>
