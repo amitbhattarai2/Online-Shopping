@@ -318,3 +318,73 @@ export const createProductsReport = (type) => async (dispatch, getState) => {
     })
   }
 }
+
+export const createProductsReportForVendor = (type, vendor) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({ type: PRODUCT_REPORT_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const { data } = await axios.get(`/api/reports/products`, {}, config)
+
+    if (type === 2) {
+      await axios({
+        url: `/api/reports/product/${vendor}`,
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute(
+          'download',
+          `Financial report for vendor id ${vendor}.pdf`
+        )
+        document.body.appendChild(link)
+        link.click()
+      })
+    }
+
+    if (type === 3) {
+      await axios({
+        url: `/api/reports/price/${vendor}`,
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute(
+          'download',
+          `Status of Sale by Product for vendor id ${vendor}.pdf`
+        )
+        document.body.appendChild(link)
+        link.click()
+      })
+    }
+
+    dispatch({
+      type: PRODUCT_REPORT_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_REPORT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}

@@ -6,8 +6,12 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 
 import FormContainer from '../components/FormContainer'
-import { createProductsReport } from '../actions/productActions'
+import {
+  createProductsReport,
+  createProductsReportForVendor,
+} from '../actions/productActions'
 import { USER_LOGIN_RESET } from '../constants/userConstants'
+import { listUsers } from '../actions/userActions'
 
 const ReportScreen = ({ history, match }) => {
   const dispatch = useDispatch()
@@ -18,9 +22,13 @@ const ReportScreen = ({ history, match }) => {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [type, setType] = useState(0)
+  const [vendor, setVendor] = useState(-1)
 
   const productReport = useSelector((state) => state.productReport)
   const { loading, error, report } = productReport
+
+  const userList = useSelector((state) => state.userList)
+  const { users } = userList
 
   const categories = [
     'List of Product',
@@ -29,8 +37,10 @@ const ReportScreen = ({ history, match }) => {
   ]
 
   useEffect(() => {
-    if (report) {
-      console.log()
+    if (userInfo && userInfo.role === 'ADMIN') {
+      dispatch(listUsers())
+    } else {
+      history.push('/login')
     }
 
     if (!userInfo || userInfo.role !== 'ADMIN') {
@@ -40,10 +50,14 @@ const ReportScreen = ({ history, match }) => {
   }, [history, userInfo, productReport])
 
   const submitHandler = (e) => {
+    console.log(vendor)
     e.preventDefault()
     if (userInfo.role === 'ADMIN') {
-      console.log(type)
-      dispatch(createProductsReport(type + 1))
+      if (vendor !== -1 && type !== 0) {
+        {
+          dispatch(createProductsReportForVendor(type + 1, vendor))
+        }
+      } else dispatch(createProductsReport(type + 1))
     }
   }
   if (!userInfo || !userInfo.role === 'ADMIN') {
@@ -62,20 +76,46 @@ const ReportScreen = ({ history, match }) => {
           ) : (
             <Form onSubmit={submitHandler}>
               <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Group controlId='category'>
-                    <Form.Label></Form.Label>
-                    <Form.Control
-                      as='select'
-                      size='sm'
-                      onChange={(e) => setType(e.target.options.selectedIndex)}
-                    >
-                      {categories &&
-                        categories.map((c, idx) => (
-                          <option key={idx}>{c}</option>
-                        ))}
-                    </Form.Control>
-                  </Form.Group>
+                <Form.Group controlId='category'>
+                  <Form.Label></Form.Label>
+                  <Form.Control
+                    as='select'
+                    size='sm'
+                    onChange={(e) => setType(e.target.options.selectedIndex)}
+                  >
+                    {categories &&
+                      categories.map((c, idx) => (
+                        <option key={idx}>{c}</option>
+                      ))}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group controlId='vendor'>
+                  <Form.Label></Form.Label>
+                  <Form.Control
+                    as='select'
+                    size='sm'
+                    onChange={(e) =>
+                      setVendor(
+                        e.target.options[
+                          e.target.options.selectedIndex
+                        ].getAttribute('data-key')
+                      )
+                    }
+                  >
+                    <option disabled value='' selected>
+                      Select Vendor
+                    </option>
+                    {users &&
+                      users.map((c, idx) =>
+                        c.role === 'VENDOR' ? (
+                          <option key={idx} data-key={c.id}>
+                            {c.username}
+                          </option>
+                        ) : (
+                          <></>
+                        )
+                      )}
+                  </Form.Control>
                 </Form.Group>
 
                 <Form.Group>
