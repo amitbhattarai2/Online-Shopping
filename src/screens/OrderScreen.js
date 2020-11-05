@@ -32,7 +32,12 @@ const OrderScreen = ({ match, history }) => {
   }
 
   useEffect(() => {
-    if (order && userInfo && userInfo.id !== order.user.id) {
+    if (
+      order &&
+      userInfo &&
+      userInfo.id !== order.user.id &&
+      userInfo.role !== 'ADMIN'
+    ) {
       history.push('/')
     }
     if (!userInfo) {
