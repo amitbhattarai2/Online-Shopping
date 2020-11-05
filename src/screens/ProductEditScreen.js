@@ -211,32 +211,6 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-            {/* {userInfo.role === 'ADMIN' ? (
-              <Form.Group>
-                <Form.Label as='legend'>Change Status</Form.Label>
-                <Col>
-                  <Form.Check
-                    type='radio'
-                    label='Active'
-                    id='active'
-                    name='status'
-                    value='Active'
-                    onChange={setActive(true)}
-                  ></Form.Check>
-                  <Form.Check
-                    type='radio'
-                    label='Inactive'
-                    id='inactive'
-                    name='status'
-                    value='Inactive'
-                    onChange={setActive(false)}
-                  ></Form.Check>
-                </Col>
-              </Form.Group>
-            ) : (
-              <></>
-            )} */}
-
             {userInfo && userInfo.role === 'ADMIN' ? (
               <Form.Group controlId='status'>
                 <Form.Label>Status </Form.Label>

@@ -40,7 +40,7 @@ const CartScreen = ({ match, location, history }) => {
       <Col md={8}>
         <h1>Shopping Cart</h1>
 
-        {cartItems.length === 0 ? (
+        {!cartItems || cartItems.length === 0 ? (
           <Message>
             Your cart is empty <Link to='/'>Go Back</Link>
           </Message>
@@ -94,12 +94,15 @@ const CartScreen = ({ match, location, history }) => {
             <ListGroup.Item>
               <h2>
                 Subtotal (
-                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}) items
+                {cartItems &&
+                  cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+                ) items
               </h2>
               $
-              {cartItems
-                .reduce((acc, item) => acc + item.quantity * item.price, 0)
-                .toFixed(2)}
+              {cartItems &&
+                cartItems
+                  .reduce((acc, item) => acc + item.quantity * item.price, 0)
+                  .toFixed(2)}
             </ListGroup.Item>
             {userInfo && userInfo.role !== 'CLIENT' ? (
               <Message>

@@ -70,7 +70,7 @@ const ProfileScreen = ({ location, history }) => {
   }
 
   useEffect(() => {
-    if (userInfo.role === 'CLIENT') dispatch(listMyOrders())
+    if (userInfo && userInfo.role === 'CLIENT') dispatch(listMyOrders())
     if (!userInfo) {
       history.push('/login')
     } else {
@@ -128,85 +128,86 @@ const ProfileScreen = ({ location, history }) => {
         </ListGroup>
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
-        {}
         {success && <Message variant='success'>Profile Updated</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
           <Message variant='danger'>{error}</Message>
         ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId='firstname'>
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type='name'
-                placeholder='Enter Firstname'
-                value={firstname}
-                onChange={(e) => setFirstName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+          userInfo && (
+            <Form onSubmit={submitHandler}>
+              <Form.Group controlId='firstname'>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  type='name'
+                  placeholder='Enter Firstname'
+                  value={firstname}
+                  onChange={(e) => setFirstName(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId='lastname'>
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                type='name'
-                placeholder='Enter Lastname'
-                value={lastname}
-                onChange={(e) => setLastName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group controlId='lastname'>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  type='name'
+                  placeholder='Enter Lastname'
+                  value={lastname}
+                  onChange={(e) => setLastName(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId='username'>
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type='name'
-                placeholder='Enter Username'
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group controlId='username'>
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type='name'
+                  placeholder='Enter Username'
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId='email'>
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type='email'
-                placeholder='Enter email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group controlId='email'>
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  type='email'
+                  placeholder='Enter email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId='password'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                placeholder='Enter password'
-                onChange={(e) => setPassword(e.target.value)}
-              ></Form.Control>
-              {!passwordValidator(password) && (
-                <Message variant='info'>
-                  <p>6 to 15 characters</p>
-                  <p>At least one lowercase</p>
-                  <p>At least one uppercase </p>
-                  <p>At least digit</p>
-                  <p>At least one special character</p>
-                </Message>
-              )}
-            </Form.Group>
+              <Form.Group controlId='password'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  placeholder='Enter password'
+                  onChange={(e) => setPassword(e.target.value)}
+                ></Form.Control>
+                {!passwordValidator(password) && (
+                  <Message variant='info'>
+                    <p>6 to 15 characters</p>
+                    <p>At least one lowercase</p>
+                    <p>At least one uppercase </p>
+                    <p>At least digit</p>
+                    <p>At least one special character</p>
+                  </Message>
+                )}
+              </Form.Group>
 
-            <Form.Group controlId='confirmPassword'>
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type='password'
-                placeholder='Confirm password'
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group controlId='confirmPassword'>
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  placeholder='Confirm password'
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
 
-            <Button type='submit' variant='primary'>
-              Update
-            </Button>
-          </Form>
+              <Button type='submit' variant='primary'>
+                Update
+              </Button>
+            </Form>
+          )
         )}
       </Col>
       {userInfo && userInfo.role === 'CLIENT' ? (

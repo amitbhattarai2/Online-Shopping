@@ -125,57 +125,58 @@ const ProductListScreen = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
-                <tr key={product.id}>
-                  <td>{product.id}</td>
-                  <td>{product.name}</td>
-                  <td>{product.category.name}</td>
-                  <td>${product.price}</td>
+              {products &&
+                products.map((product) => (
+                  <tr key={product.id}>
+                    <td>{product.id}</td>
+                    <td>{product.name}</td>
+                    <td>{product.category.name}</td>
+                    <td>${product.price}</td>
 
-                  <td>
-                    <Row>
-                      <Col md={6}>
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fluid
-                          rounded
-                        />
-                      </Col>
-                    </Row>
-                  </td>
-                  <td>{product.description}</td>
-                  <td>
-                    {product.active ? (
-                      <Badge pill variant='success'>
-                        Active
-                      </Badge>
-                    ) : (
-                      <Badge pill variant='danger'>
-                        Inactive
-                      </Badge>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer
-                      to={`/${
-                        userInfo && userInfo.role.toLowerCase()
-                      }/product/${product.id}/edit`}
-                    >
-                      <Button variant='light' className='btn-sm'>
-                        <i className='fas fa-edit'></i>
+                    <td>
+                      <Row>
+                        <Col md={6}>
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fluid
+                            rounded
+                          />
+                        </Col>
+                      </Row>
+                    </td>
+                    <td>{product.description}</td>
+                    <td>
+                      {product.active ? (
+                        <Badge pill variant='success'>
+                          Active
+                        </Badge>
+                      ) : (
+                        <Badge pill variant='danger'>
+                          Inactive
+                        </Badge>
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer
+                        to={`/${
+                          userInfo && userInfo.role.toLowerCase()
+                        }/product/${product.id}/edit`}
+                      >
+                        <Button variant='light' className='btn-sm'>
+                          <i className='fas fa-edit'></i>
+                        </Button>
+                      </LinkContainer>
+                      <Button
+                        variant='danger'
+                        className='btn-sm'
+                        onClick={() => deleteHandler(product.id)}
+                      >
+                        <i className='fas fa-trash'></i>
                       </Button>
-                    </LinkContainer>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => deleteHandler(product.id)}
-                    >
-                      <i className='fas fa-trash'></i>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
           <Paginate

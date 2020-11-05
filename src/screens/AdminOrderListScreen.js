@@ -45,45 +45,46 @@ const AdminOrderListScreen = ({ history }) => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.user.username}</td>
-                <td>{order.order_created.split('T')[0]}</td>
-                <td>{order.total}</td>
-                <td>
-                  {order.status === 'PAID' || order.status == 'RECEIVED' ? (
-                    <Message variant='success'>Yes</Message>
-                  ) : (
-                    <Message variant='danger'>No</Message>
-                  )}
-                </td>
-                <td>
-                  {order.status === 'RECEIVED' ? (
-                    <Message variant='warning'>Received</Message>
-                  ) : order.status === 'INPROGRESS' ? (
-                    <Message variant='primary'>In Progress</Message>
-                  ) : order.status === 'CANCELED' ? (
-                    <Message variant='danger'>Cancelled</Message>
-                  ) : order.status === 'SHIPPED' ? (
-                    <Message variant='info'>Shipped</Message>
-                  ) : order.status === 'DELIVERED' ? (
-                    <Message variant='success'>Delivered</Message>
-                  ) : order.status === 'PAID' ? (
-                    <Message variant='primary'>Paid</Message>
-                  ) : (
-                    <Message>Processing</Message>
-                  )}
-                </td>
-                <td>
-                  <LinkContainer to={`/order/${order.id}`}>
-                    <Button className='btn-sm' variant='light'>
-                      Details
-                    </Button>
-                  </LinkContainer>
-                </td>
-              </tr>
-            ))}
+            {orders &&
+              orders.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.user.username}</td>
+                  <td>{order.order_created.split('T')[0]}</td>
+                  <td>{order.total}</td>
+                  <td>
+                    {order.status === 'PAID' || order.status == 'RECEIVED' ? (
+                      <Message variant='success'>Yes</Message>
+                    ) : (
+                      <Message variant='danger'>No</Message>
+                    )}
+                  </td>
+                  <td>
+                    {order.status === 'RECEIVED' ? (
+                      <Message variant='warning'>Received</Message>
+                    ) : order.status === 'INPROGRESS' ? (
+                      <Message variant='primary'>In Progress</Message>
+                    ) : order.status === 'CANCELED' ? (
+                      <Message variant='danger'>Cancelled</Message>
+                    ) : order.status === 'SHIPPED' ? (
+                      <Message variant='info'>Shipped</Message>
+                    ) : order.status === 'DELIVERED' ? (
+                      <Message variant='success'>Delivered</Message>
+                    ) : order.status === 'PAID' ? (
+                      <Message variant='primary'>Paid</Message>
+                    ) : (
+                      <Message>Processing</Message>
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/order/${order.id}`}>
+                      <Button className='btn-sm' variant='light'>
+                        Details
+                      </Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
       )}
