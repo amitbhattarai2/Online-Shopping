@@ -137,7 +137,8 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='name'
                 placeholder='Enter name'
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                value={name}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
                 required
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
@@ -148,7 +149,8 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 as='select'
                 required
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                value={categories && categories[categoryId]}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
                 onChange={(e) => setCategoryId(e.target.options.selectedIndex)}
               >
                 {categories &&
@@ -161,8 +163,9 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='number'
                 placeholder='Enter price'
+                value={price}
                 required
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -173,14 +176,14 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter image url'
                 value={image}
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
                 required
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.File
                 id='image-file'
                 label='Choose File'
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
                 required
                 custom
                 onChange={uploadFileHandler}
@@ -193,7 +196,8 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='number'
                 placeholder='Enter countInStock'
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
+                value={countInStock}
                 required
                 onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
@@ -205,7 +209,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter description'
                 value={description}
-                disabled={userInfo || userInfo.role === 'ADMIN'}
+                disabled={userInfo && userInfo.role === 'ADMIN'}
                 required
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
